@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Celeste IQ — AI Data Governance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;600;700;900&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy-deep: #020917;
+      --navy-mid: #071530;
+      --navy-light: #0d2146;
+      --blue-glow: #2a6fd4;
+      --blue-accent: #4a9eff;
+      --blue-bright: #6db8ff;
+      --text-white: #ffffff;
+      --text-muted: #8aafd4;
+      --text-dim: #3d6080;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--navy-deep);
+      color: var(--text-white);
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.25rem 4rem;
+      background: linear-gradient(to bottom, rgba(2,9,23,0.95) 0%, transparent 100%);
+      backdrop-filter: blur(4px);
+    }
+    .nav-logo {
+      font-family: 'Arial Black', Arial, sans-serif;
+      font-size: 1.5rem; font-weight: 900; letter-spacing: 0.04em;
+    }
+    .nav-logo span { color: var(--blue-accent); }
+    .nav-links { display: flex; gap: 2.5rem; align-items: center; }
+    .nav-links a {
+      color: var(--text-muted); font-size: 0.875rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text-white); }
+    .nav-cta {
+      border: 1px solid var(--blue-glow) !important;
+      color: var(--blue-bright) !important;
+      padding: 0.45rem 1.1rem;
+      border-radius: 3px;
+      transition: background 0.2s, color 0.2s !important;
+    }
+    .nav-cta:hover {
+      background: var(--blue-glow) !important;
+      color: #fff !important;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 8rem 4rem 4rem;
+      overflow: hidden;
+    }
+    #wave-canvas {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      opacity: 0.35;
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      max-width: 780px;
+    }
+    .hero-eyebrow {
+      font-size: 0.8rem; font-weight: 600; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--blue-accent);
+      margin-bottom: 1.25rem;
+      animation: fadeUp 0.6s ease both;
+    }
+    .hero-content h1 {
+      font-family: 'Arial Black', Arial, sans-serif;
+      font-size: clamp(3.5rem, 7vw, 6.5rem);
+      font-weight: 900; line-height: 0.95;
+      margin-bottom: 1.25rem;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+    .hero-content h1 .iq { color: var(--blue-accent); }
+    .hero-content h1 .dot { color: var(--blue-glow); }
+    .hero-subtitle {
+      font-size: 1.3rem; font-weight: 300; letter-spacing: 0.04em;
+      color: var(--text-muted); margin-bottom: 1rem;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+    .hero-subtitle strong { color: var(--text-white); font-weight: 600; }
+    .hero-desc {
+      font-size: 1.05rem; line-height: 1.75; color: var(--text-muted);
+      max-width: 560px; margin-bottom: 2.5rem;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+    .hero-actions {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      animation: fadeUp 0.6s 0.4s ease both;
+    }
+    .btn-primary {
+      background: var(--blue-glow); color: #fff;
+      padding: 0.85rem 2rem; border-radius: 3px;
+      font-weight: 700; font-size: 0.9rem; letter-spacing: 0.05em;
+      text-transform: uppercase; text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-primary:hover { background: var(--blue-accent); transform: translateY(-1px); }
+    .btn-secondary {
+      border: 1px solid var(--text-dim); color: var(--text-muted);
+      padding: 0.85rem 2rem; border-radius: 3px;
+      font-weight: 600; font-size: 0.9rem; letter-spacing: 0.05em;
+      text-transform: uppercase; text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--blue-accent); color: var(--text-white); }
+
+    .scroll-hint {
+      position: absolute; bottom: 2.5rem; left: 4rem;
+      font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--text-dim); display: flex; align-items: center; gap: 0.6rem;
+      animation: fadeIn 1s 1s ease both;
+    }
+    .scroll-hint::before {
+      content: ''; display: block; width: 1px; height: 40px;
+      background: linear-gradient(to bottom, transparent, var(--text-dim));
+    }
+
+    /* ─── STATS BAND ─── */
+    .stats-band {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid rgba(42,111,212,0.15);
+      border-bottom: 1px solid rgba(42,111,212,0.15);
+      background: var(--navy-mid);
+      padding: 0 4rem;
+    }
+    .stat-item {
+      padding: 2.5rem 2rem;
+      border-right: 1px solid rgba(42,111,212,0.1);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-number {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2.8rem; font-weight: 900; line-height: 1;
+      color: var(--blue-bright); margin-bottom: 0.4rem;
+    }
+    .stat-label {
+      font-size: 0.8rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--text-muted);
+    }
+
+    /* ─── FEATURES ─── */
+    .features {
+      padding: 6rem 4rem;
+      background: var(--navy-deep);
+    }
+    .features-header {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      margin-bottom: 3.5rem; gap: 2rem;
+    }
+    .section-tag {
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--blue-accent);
+      margin-bottom: 0.75rem;
+    }
+    .features-header h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(2rem, 4vw, 3rem); font-weight: 900;
+      line-height: 1.05;
+    }
+    .features-header p {
+      color: var(--text-muted); font-size: 0.95rem;
+      line-height: 1.7; max-width: 340px; text-align: right;
+    }
+    .feature-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+      background: rgba(42,111,212,0.12);
+      border: 1px solid rgba(42,111,212,0.12);
+    }
+    .feature-card {
+      background: var(--navy-deep);
+      padding: 2.5rem 2rem;
+      transition: background 0.25s;
+    }
+    .feature-card:hover { background: var(--navy-mid); }
+    .feature-icon {
+      width: 40px; height: 40px; margin-bottom: 1.25rem;
+      color: var(--blue-accent);
+    }
+    .feature-card h3 {
+      font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem;
+      letter-spacing: 0.02em;
+    }
+    .feature-card p {
+      font-size: 0.88rem; color: var(--text-muted); line-height: 1.65;
+    }
+
+    /* ─── CTA ─── */
+    .cta-section {
+      padding: 7rem 4rem;
+      text-align: center;
+      background: var(--navy-mid);
+      position: relative; overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(30,80,180,0.2) 0%, transparent 70%);
+    }
+    .cta-section .section-tag { margin-bottom: 1.5rem; }
+    .cta-section h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 900; line-height: 1; margin-bottom: 1.5rem;
+      position: relative; z-index: 1;
+    }
+    .cta-section p {
+      max-width: 500px; margin: 0 auto 2.5rem;
+      color: var(--text-muted); font-size: 1.05rem;
+      line-height: 1.7; position: relative; z-index: 1;
+    }
+    .cta-section .hero-actions { justify-content: center; position: relative; z-index: 1; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 2rem 4rem;
+      border-top: 1px solid rgba(42,111,212,0.12);
+      display: flex; justify-content: space-between; align-items: center;
+      color: var(--text-dim); font-size: 0.8rem;
+    }
+    footer .nav-logo { font-size: 1.1rem; }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      nav, .hero, .stats-band, .features, .cta-section, footer {
+        padding-left: 1.5rem; padding-right: 1.5rem;
+      }
+      nav { padding-top: 1rem; padding-bottom: 1rem; }
+      .nav-links { gap: 1.25rem; }
+      .stats-band { grid-template-columns: repeat(2, 1fr); }
+      .feature-grid { grid-template-columns: 1fr; }
+      .features-header { flex-direction: column; align-items: flex-start; }
+      .features-header p { text-align: left; }
+      .scroll-hint { left: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">Celeste <span>IQ</span></div>
+    <div class="nav-links">
+      <a href="#">Platform</a>
+      <a href="#">Solutions</a>
+      <a href="#">Docs</a>
+      <a href="#">Company</a>
+      <a href="#" class="nav-cta">Get Started</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <canvas id="wave-canvas"></canvas>
+
+    <div class="hero-content">
+      <p class="hero-eyebrow">Next-generation governance</p>
+      <h1>Celeste <span class="iq">IQ</span><span class="dot">.</span></h1>
+      <div class="hero-subtitle"><strong>AI Data Governance.</strong></div>
+      <p class="hero-desc">
+        Govern your data with intelligence. Celeste IQ brings automated classification,
+        lineage tracking, and policy enforcement to every layer of your data estate —
+        at the speed of AI.
+      </p>
+      <div class="hero-actions">
+        <a href="#" class="btn-primary">Request Demo</a>
+        <a href="#" class="btn-secondary">See Platform</a>
+      </div>
+    </div>
+
+    <div class="scroll-hint">Scroll to explore</div>
+  </section>
+
+  <!-- STATS BAND -->
+  <div class="stats-band">
+    <div class="stat-item">
+      <div class="stat-number">10×</div>
+      <div class="stat-label">Faster policy enforcement</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">99%</div>
+      <div class="stat-label">Classification accuracy</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">500+</div>
+      <div class="stat-label">Data sources supported</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">&#60;1 day</div>
+      <div class="stat-label">Time to first insight</div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section class="features">
+    <div class="features-header">
+      <div>
+        <div class="section-tag">Platform Capabilities</div>
+        <h2>Every layer of your<br>data estate, governed.</h2>
+      </div>
+      <p>From raw ingestion to AI-ready outputs — Celeste IQ brings intelligence to every step of the data lifecycle.</p>
+    </div>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2v-4M9 21H5a2 2 0 01-2-2v-4m0 0h18"/>
+        </svg>
+        <h3>Automated Classification</h3>
+        <p>ML-powered tagging of PII, sensitive data, and business-critical assets across every connected source — in real time.</p>
+      </div>
+      <div class="feature-card">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+        </svg>
+        <h3>AI Readiness Scoring</h3>
+        <p>Instantly know which datasets are ready for AI workloads. Score quality, completeness, and compliance in one view.</p>
+      </div>
+      <div class="feature-card">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="3"/><path d="M12 2v3m0 14v3M4.22 4.22l2.12 2.12m11.32 11.32l2.12 2.12M2 12h3m14 0h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/>
+        </svg>
+        <h3>Lineage Tracking</h3>
+        <p>End-to-end data lineage from source to model. Know exactly where your data came from, where it went, and who touched it.</p>
+      </div>
+      <div class="feature-card">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+        </svg>
+        <h3>Policy Enforcement</h3>
+        <p>Define once, enforce everywhere. Automated policy controls across Snowflake, Databricks, S3, BigQuery, and 500+ connectors.</p>
+      </div>
+      <div class="feature-card">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/>
+        </svg>
+        <h3>Governance Dashboard</h3>
+        <p>A single command center for your CDO, compliance, and data engineering teams. Real-time risk signals, not quarterly audits.</p>
+      </div>
+      <div class="feature-card">
+        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+        <h3>Role-Based Access</h3>
+        <p>Granular access controls tied to your org chart. Ensure the right people see the right data — and never the wrong people.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="section-tag">Get Started</div>
+    <h2>Ready to govern<br>at AI speed?</h2>
+    <p>Join forward-thinking data teams who trust Celeste IQ to keep their AI pipelines clean, compliant, and ready.</p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary">Request a Demo</a>
+      <a href="#" class="btn-secondary">Talk to Sales</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="nav-logo">Celeste <span style="color:var(--blue-accent)">IQ</span></div>
+    <div>© 2026 Celeste IQ. All rights reserved.</div>
+    <div>Privacy · Terms · Security</div>
+  </footer>
+
+  <script>
+    // Animated wave canvas
+    const canvas = document.getElementById('wave-canvas');
+    const ctx = canvas.getContext('2d');
+    let t = 0;
+
+    function resize() {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const w = canvas.width, h = canvas.height;
+
+      for (let layer = 0; layer < 4; layer++) {
+        ctx.beginPath();
+        const amp = 60 + layer * 25;
+        const freq = 0.004 - layer * 0.0005;
+        const speed = 0.008 + layer * 0.003;
+        const yBase = h * (0.4 + layer * 0.12);
+        const alpha = 0.12 - layer * 0.02;
+
+        ctx.moveTo(0, h);
+        for (let x = 0; x <= w; x += 4) {
+          const y = yBase + Math.sin(x * freq + t * speed + layer) * amp
+                          + Math.sin(x * freq * 1.7 + t * speed * 0.6) * (amp * 0.4);
+          ctx.lineTo(x, y);
+        }
+        ctx.lineTo(w, h);
+        ctx.closePath();
+
+        const grad = ctx.createLinearGradient(0, yBase - amp, 0, h);
+        grad.addColorStop(0, `rgba(42, 111, 212, ${alpha})`);
+        grad.addColorStop(1, `rgba(2, 9, 23, 0)`);
+        ctx.fillStyle = grad;
+        ctx.fill();
+      }
+
+      t += 1;
+      requestAnimationFrame(draw);
+    }
+
+    resize();
+    window.addEventListener('resize', resize);
+    draw();
+  </script>
+
+</body>
+</html>
