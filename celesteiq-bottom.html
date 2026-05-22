@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CelesteIQ — Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:#060c16;
+  color:#e2eaf4;
+  font-family:'Inter',sans-serif;
+  font-size:16px;
+  line-height:1.65;
+  overflow-x:hidden;
+}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 6%;
+  height:64px;
+  background:rgba(6,12,22,0.88);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.nav-logo{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:19px;font-weight:700;color:#fff;letter-spacing:-0.3px;
+}
+.nav-logo span{color:#38bdf8;}
+.nav-links{display:flex;gap:28px;list-style:none;}
+.nav-links a{color:rgba(226,234,244,0.55);text-decoration:none;font-size:14px;transition:color .2s;}
+.nav-links a:hover{color:#e2eaf4;}
+.nav-cta{
+  background:#38bdf8;color:#060c16;
+  padding:8px 18px;border-radius:6px;
+  font-size:14px;font-weight:600;text-decoration:none;
+  transition:background .2s;
+}
+.nav-cta:hover{background:#7dd3fc;}
+
+/* ── WRAPPER ── */
+.wrap{max-width:1100px;margin:0 auto;padding:0 6%;}
+
+/* ── SHARED ── */
+.eyebrow{
+  font-size:11px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;
+  color:#38bdf8;margin-bottom:14px;
+  display:flex;align-items:center;gap:8px;
+}
+.eyebrow::before{content:'';display:block;width:18px;height:1px;background:#38bdf8;}
+.section-heading{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:clamp(30px,4vw,46px);font-weight:800;
+  line-height:1.08;letter-spacing:-1.5px;color:#fff;margin-bottom:14px;
+}
+.section-heading em{font-style:normal;color:rgba(226,234,244,0.38);}
+.section-sub{font-size:16px;color:rgba(226,234,244,0.5);line-height:1.7;max-width:500px;}
+
+section{padding:96px 0;border-top:1px solid rgba(255,255,255,0.055);}
+section:first-of-type{padding-top:120px;}
+
+/* ── ONBOARDING ── */
+.ob-steps{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:0;margin-top:56px;position:relative;
+}
+.ob-steps::before{
+  content:'';position:absolute;
+  top:22px;left:calc(12.5% + 1px);right:12.5%;
+  height:1px;background:rgba(56,189,248,0.18);
+}
+.ob-step{padding-right:24px;}
+.ob-num{
+  width:44px;height:44px;border-radius:50%;
+  border:1px solid rgba(56,189,248,0.35);
+  background:#060c16;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:16px;font-weight:700;color:#38bdf8;
+  margin-bottom:22px;position:relative;z-index:1;
+}
+.ob-num.lit{background:rgba(56,189,248,0.12);border-color:#38bdf8;}
+.ob-week{font-size:11px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:rgba(56,189,248,0.5);margin-bottom:7px;}
+.ob-title{font-size:15px;font-weight:600;color:#e2eaf4;margin-bottom:7px;}
+.ob-desc{font-size:13px;color:rgba(226,234,244,0.45);line-height:1.65;}
+
+/* ── ROI ── */
+.roi-cards{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1px;background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:16px;overflow:hidden;
+  margin-top:52px;
+}
+.roi-card{
+  background:#060c16;padding:32px 28px;
+  transition:background .2s;
+}
+.roi-card:hover{background:#0b1422;}
+.roi-num{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:38px;font-weight:800;letter-spacing:-1.5px;
+  line-height:1;margin-bottom:10px;color:#38bdf8;
+}
+.roi-num.g{color:#34d399;}
+.roi-num.a{color:#fbbf24;}
+.roi-title{font-size:15px;font-weight:600;color:#e2eaf4;margin-bottom:6px;}
+.roi-desc{font-size:13px;color:rgba(226,234,244,0.42);line-height:1.65;}
+
+/* ── AI READINESS ── */
+.air-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start;margin-top:52px;}
+.score-row{display:flex;align-items:center;gap:28px;margin:32px 0 28px;}
+.ring-wrap{position:relative;width:100px;height:100px;flex-shrink:0;}
+.ring-wrap svg{width:100px;height:100px;transform:rotate(-90deg);}
+.ring-label{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.ring-big{font-family:'Plus Jakarta Sans',sans-serif;font-size:26px;font-weight:800;color:#38bdf8;line-height:1;}
+.ring-small{font-size:11px;color:rgba(226,234,244,0.35);}
+.dims{display:flex;flex-direction:column;gap:9px;flex:1;}
+.dim{display:flex;align-items:center;gap:10px;}
+.dim-label{font-size:12px;color:rgba(226,234,244,0.45);width:112px;flex-shrink:0;}
+.dim-track{flex:1;height:3px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden;}
+.dim-fill{height:100%;background:#38bdf8;border-radius:2px;}
+.dim-val{font-size:12px;font-weight:500;color:#e2eaf4;width:30px;text-align:right;flex-shrink:0;}
+.air-pills{display:flex;flex-direction:column;gap:12px;}
+.air-pill{
+  display:flex;align-items:flex-start;gap:14px;
+  padding:16px 18px;
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:12px;background:rgba(255,255,255,0.02);
+}
+.pill-icon{
+  width:34px;height:34px;border-radius:8px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+}
+.pill-icon.b{background:rgba(56,189,248,0.12);color:#38bdf8;}
+.pill-icon.g{background:rgba(52,211,153,0.1);color:#34d399;}
+.pill-icon.a{background:rgba(251,191,36,0.1);color:#fbbf24;}
+.pill-title{font-size:14px;font-weight:600;color:#e2eaf4;margin-bottom:3px;}
+.pill-sub{font-size:12px;color:rgba(226,234,244,0.42);line-height:1.55;}
+
+/* ── TRANSPARENCY ── */
+.trans-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start;margin-top:52px;}
+.check-list{display:flex;flex-direction:column;gap:18px;margin-top:28px;}
+.check-item{display:flex;align-items:flex-start;gap:12px;}
+.check-icon{font-size:18px;color:#34d399;flex-shrink:0;margin-top:1px;}
+.check-title{font-size:14px;font-weight:600;color:#e2eaf4;margin-bottom:3px;}
+.check-desc{font-size:13px;color:rgba(226,234,244,0.42);line-height:1.6;}
+.audit-box{
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:14px;overflow:hidden;
+  background:rgba(255,255,255,0.02);
+}
+.audit-head{
+  padding:12px 18px;
+  border-bottom:1px solid rgba(255,255,255,0.07);
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(255,255,255,0.03);
+}
+.audit-head-title{font-size:13px;font-weight:600;color:#e2eaf4;}
+.live-dot{display:flex;align-items:center;gap:6px;font-size:11px;color:#34d399;}
+.live-dot::before{content:'';width:6px;height:6px;border-radius:50%;background:#34d399;display:block;}
+.audit-row{
+  padding:11px 18px;border-bottom:1px solid rgba(255,255,255,0.05);
+  display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;
+}
+.audit-row:last-child{border-bottom:none;}
+.badge{
+  font-size:10px;font-weight:600;padding:2px 8px;border-radius:100px;
+  white-space:nowrap;
+}
+.badge.b{background:rgba(56,189,248,0.12);color:#38bdf8;border:1px solid rgba(56,189,248,0.25);}
+.badge.g{background:rgba(52,211,153,0.1);color:#34d399;border:1px solid rgba(52,211,153,0.2);}
+.badge.a{background:rgba(251,191,36,0.08);color:#fbbf24;border:1px solid rgba(251,191,36,0.2);}
+.audit-text{font-size:12px;color:rgba(226,234,244,0.5);}
+.audit-text strong{color:#e2eaf4;font-weight:500;}
+.audit-time{font-size:11px;color:rgba(226,234,244,0.25);font-family:monospace;white-space:nowrap;}
+
+/* ── GLOSSARY ── */
+.gloss-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:48px;}
+.gloss-card{
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:14px;padding:22px 22px;
+  background:rgba(255,255,255,0.02);
+  transition:background .2s;
+}
+.gloss-card:hover{background:rgba(255,255,255,0.04);}
+.gloss-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.gloss-term{font-size:15px;font-weight:600;color:#e2eaf4;}
+.ai-pill{
+  font-size:10px;font-weight:600;padding:2px 8px;border-radius:100px;
+  background:rgba(56,189,248,0.1);color:#38bdf8;border:1px solid rgba(56,189,248,0.2);
+  display:flex;align-items:center;gap:4px;
+}
+.gloss-def{font-size:13px;color:rgba(226,234,244,0.45);line-height:1.65;margin-bottom:12px;}
+.gloss-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.gloss-tag{
+  font-size:11px;padding:2px 8px;border-radius:100px;
+  background:rgba(255,255,255,0.04);color:rgba(226,234,244,0.35);
+  border:1px solid rgba(255,255,255,0.07);
+}
+
+/* ── CTA ── */
+.cta-wrap{
+  margin:96px 0 0;padding:72px 56px;
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:20px;
+  background:rgba(255,255,255,0.02);
+  text-align:center;position:relative;overflow:hidden;
+}
+.cta-wrap::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(56,189,248,0.06),transparent 70%);
+}
+.cta-heading{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:clamp(32px,4.5vw,54px);font-weight:800;
+  letter-spacing:-1.5px;line-height:1.05;color:#fff;margin-bottom:16px;
+  position:relative;
+}
+.cta-heading em{font-style:normal;color:#38bdf8;}
+.cta-sub{
+  font-size:17px;color:rgba(226,234,244,0.45);
+  max-width:460px;margin:0 auto 40px;line-height:1.7;position:relative;
+}
+.cta-btns{display:flex;justify-content:center;gap:12px;position:relative;}
+.btn-p{
+  background:#38bdf8;color:#060c16;
+  padding:13px 26px;border-radius:8px;
+  font-size:15px;font-weight:600;text-decoration:none;
+  display:inline-flex;align-items:center;gap:8px;
+  transition:background .2s,transform .15s;border:none;cursor:pointer;
+}
+.btn-p:hover{background:#7dd3fc;transform:translateY(-1px);}
+.btn-s{
+  background:transparent;color:#e2eaf4;
+  padding:13px 26px;border-radius:8px;
+  font-size:15px;font-weight:500;text-decoration:none;
+  border:1px solid rgba(226,234,244,0.15);
+  transition:border-color .2s,background .2s;cursor:pointer;
+}
+.btn-s:hover{border-color:rgba(226,234,244,0.3);background:rgba(226,234,244,0.04);}
+
+/* ── FOOTER ── */
+footer{
+  border-top:1px solid rgba(255,255,255,0.06);
+  padding:28px 6%;
+  display:flex;align-items:center;justify-content:space-between;
+  max-width:100%;
+}
+.foot-brand{font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:700;color:#fff;}
+.foot-brand span{color:#38bdf8;}
+.foot-links{display:flex;gap:22px;}
+.foot-links a{font-size:13px;color:rgba(226,234,244,0.3);text-decoration:none;transition:color .2s;}
+.foot-links a:hover{color:rgba(226,234,244,0.6);}
+.foot-copy{font-size:12px;color:rgba(226,234,244,0.25);}
+
+@media(max-width:860px){
+  .ob-steps{grid-template-columns:1fr 1fr;gap:36px;}
+  .ob-steps::before{display:none;}
+  .roi-cards{grid-template-columns:1fr 1fr;}
+  .air-grid,.trans-grid{grid-template-columns:1fr;}
+  .gloss-grid{grid-template-columns:1fr;}
+  .cta-wrap{padding:48px 28px;}
+  nav .nav-links{display:none;}
+  footer{flex-direction:column;gap:16px;text-align:center;}
+}
+@media(max-width:560px){
+  .roi-cards{grid-template-columns:1fr;}
+  .ob-steps{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Celeste<span>IQ</span></div>
+  <ul class="nav-links">
+    <li><a href="#onboarding">Onboarding</a></li>
+    <li><a href="#roi">ROI</a></li>
+    <li><a href="#readiness">AI Readiness</a></li>
+    <li><a href="#transparency">Transparency</a></li>
+    <li><a href="#glossary">Glossary</a></li>
+  </ul>
+  <a href="#cta" class="nav-cta">Request Demo</a>
+</nav>
+
+<div class="wrap">
+
+  <!-- GUIDED ONBOARDING -->
+  <section id="onboarding">
+    <div class="eyebrow">Guided Onboarding</div>
+    <h2 class="section-heading">Value in the first week,<br><em>not the first quarter.</em></h2>
+    <p class="section-sub">Enterprise governance shouldn't take months to show ROI. CelesteIQ is designed to deliver immediate, measurable value from day one — no professional services required.</p>
+    <div class="ob-steps">
+      <div class="ob-step">
+        <div class="ob-num lit">1</div>
+        <div class="ob-week">Day 1</div>
+        <div class="ob-title">Connect your sources</div>
+        <div class="ob-desc">Point CelesteIQ at your warehouse, databases, or cloud storage. 500+ native connectors, no ETL required.</div>
+      </div>
+      <div class="ob-step">
+        <div class="ob-num">2</div>
+        <div class="ob-week">Day 1–2</div>
+        <div class="ob-title">Auto-catalog &amp; classify</div>
+        <div class="ob-desc">AI scans and profiles every asset. PII and sensitive fields classified with confidence scores in minutes.</div>
+      </div>
+      <div class="ob-step">
+        <div class="ob-num">3</div>
+        <div class="ob-week">Day 3–5</div>
+        <div class="ob-title">Graph comes alive</div>
+        <div class="ob-desc">Lineage, ownership, and quality woven into the governance graph. Explore your entire data estate visually.</div>
+      </div>
+      <div class="ob-step">
+        <div class="ob-num">4</div>
+        <div class="ob-week">Week 1</div>
+        <div class="ob-title">Prove value</div>
+        <div class="ob-desc">AI Readiness Score live. ROI dashboard showing governance impact. Stakeholder-ready from day one.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GOVERNANCE ROI DASHBOARD -->
+  <section id="roi">
+    <div class="eyebrow">Governance ROI Dashboard</div>
+    <h2 class="section-heading">The only platform that<br><em>proves its own value.</em></h2>
+    <p class="section-sub">ROI traceable through the governance graph — in both governance and AI-enablement terms. No more hoping governance is working.</p>
+    <div class="roi-cards">
+      <div class="roi-card">
+        <div class="roi-num">3.2×</div>
+        <div class="roi-title">Faster AI project delivery</div>
+        <div class="roi-desc">Less time on data prep, more time building models when governance is in place from day one.</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-num g">68%</div>
+        <div class="roi-title">Reduction in data incidents</div>
+        <div class="roi-desc">Proactive quality gates and anomaly detection catch issues before they reach production pipelines.</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-num a">$2.4M</div>
+        <div class="roi-title">Avg. annual risk avoided</div>
+        <div class="roi-desc">Compliance and data breach risk reduction, traceable to specific governance actions in the graph.</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-num">91%</div>
+        <div class="roi-title">Catalog coverage at week 1</div>
+        <div class="roi-desc">Automated discovery populates and classifies your catalog before the first sprint ends.</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-num g">5×</div>
+        <div class="roi-title">More datasets AI-ready</div>
+        <div class="roi-desc">Continuous quality monitoring and lineage tracking unlock more of your estate for AI workloads.</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-num">100%</div>
+        <div class="roi-title">AI action audit trail</div>
+        <div class="roi-desc">Every AI action logged with graph-based reasoning chains for regulated industries.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI READINESS SCORE -->
+  <section id="readiness">
+    <div class="eyebrow">AI Readiness Score</div>
+    <h2 class="section-heading">Is your data<br><em>ready for AI?</em></h2>
+    <p class="section-sub">Continuously-updated composite metric navigable through the governance graph — see exactly which gaps drive your score and how to close them.</p>
+    <div class="air-grid">
+      <div>
+        <div class="score-row">
+          <div class="ring-wrap">
+            <svg viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="6"/>
+              <circle cx="50" cy="50" r="42" fill="none" stroke="#38bdf8" stroke-width="6"
+                stroke-dasharray="263.9" stroke-dashoffset="55.4" stroke-linecap="round"/>
+            </svg>
+            <div class="ring-label">
+              <span class="ring-big">79</span>
+              <span class="ring-small">/100</span>
+            </div>
+          </div>
+          <div class="dims">
+            <div class="dim">
+              <span class="dim-label">Completeness</span>
+              <div class="dim-track"><div class="dim-fill" style="width:91%"></div></div>
+              <span class="dim-val">91%</span>
+            </div>
+            <div class="dim">
+              <span class="dim-label">Consistency</span>
+              <div class="dim-track"><div class="dim-fill" style="width:84%"></div></div>
+              <span class="dim-val">84%</span>
+            </div>
+            <div class="dim">
+              <span class="dim-label">Freshness</span>
+              <div class="dim-track"><div class="dim-fill" style="width:76%"></div></div>
+              <span class="dim-val">76%</span>
+            </div>
+            <div class="dim">
+              <span class="dim-label">Compliance</span>
+              <div class="dim-track"><div class="dim-fill" style="width:65%"></div></div>
+              <span class="dim-val">65%</span>
+            </div>
+            <div class="dim">
+              <span class="dim-label">Lineage coverage</span>
+              <div class="dim-track"><div class="dim-fill" style="width:82%"></div></div>
+              <span class="dim-val">82%</span>
+            </div>
+          </div>
+        </div>
+        <a href="#cta" class="btn-p" style="display:inline-flex;">Get your score &#8594;</a>
+      </div>
+      <div class="air-pills">
+        <div class="air-pill">
+          <div class="pill-icon b"><i class="ti ti-bolt"></i></div>
+          <div>
+            <div class="pill-title">Live score updates</div>
+            <div class="pill-sub">Score refreshes continuously as your data changes — always current, never stale.</div>
+          </div>
+        </div>
+        <div class="air-pill">
+          <div class="pill-icon g"><i class="ti ti-chart-dots"></i></div>
+          <div>
+            <div class="pill-title">Graph-navigable gaps</div>
+            <div class="pill-sub">Click any dimension to explore root causes directly in the governance graph.</div>
+          </div>
+        </div>
+        <div class="air-pill">
+          <div class="pill-icon a"><i class="ti ti-brain"></i></div>
+          <div>
+            <div class="pill-title">Training data assessment</div>
+            <div class="pill-sub">AI-specific quality dimensions purpose-built for ML readiness and model fitness.</div>
+          </div>
+        </div>
+        <div class="air-pill">
+          <div class="pill-icon b"><i class="ti ti-package"></i></div>
+          <div>
+            <div class="pill-title">Use case registry</div>
+            <div class="pill-sub">Map datasets to AI initiatives with per-use-case readiness tracking across your estate.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI TRANSPARENCY CENTER -->
+  <section id="transparency">
+    <div class="eyebrow">AI Transparency Center</div>
+    <h2 class="section-heading">Every AI action,<br><em>fully accountable.</em></h2>
+    <p class="section-sub">Full audit trail for every AI action taken on your data. Graph-based reasoning chains built for regulated industries — explain every AI decision to auditors and regulators.</p>
+    <div class="trans-grid">
+      <div>
+        <div class="check-list">
+          <div class="check-item">
+            <i class="ti ti-circle-check check-icon"></i>
+            <div>
+              <div class="check-title">Graph-based reasoning chains</div>
+              <div class="check-desc">Every classification decision traceable to the graph path that produced it — inspectable at any depth.</div>
+            </div>
+          </div>
+          <div class="check-item">
+            <i class="ti ti-circle-check check-icon"></i>
+            <div>
+              <div class="check-title">Immutable action log</div>
+              <div class="check-desc">Timestamped record of every suggestion, rule, and automated action — exportable for compliance audits.</div>
+            </div>
+          </div>
+          <div class="check-item">
+            <i class="ti ti-circle-check check-icon"></i>
+            <div>
+              <div class="check-title">Human-in-the-loop overrides</div>
+              <div class="check-desc">Every AI suggestion can be accepted, rejected, or modified — with the decision recorded in the graph.</div>
+            </div>
+          </div>
+          <div class="check-item">
+            <i class="ti ti-circle-check check-icon"></i>
+            <div>
+              <div class="check-title">Regulator-ready exports</div>
+              <div class="check-desc">One-click audit packages with full reasoning chains, confidence scores, and data provenance.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="audit-box">
+        <div class="audit-head">
+          <span class="audit-head-title">AI action log</span>
+          <span class="live-dot">Live</span>
+        </div>
+        <div class="audit-row">
+          <span class="badge b">Classify</span>
+          <span class="audit-text"><strong>orders.customer_email</strong> tagged PII · confidence 98%</span>
+          <span class="audit-time">0:12s</span>
+        </div>
+        <div class="audit-row">
+          <span class="badge g">Suggest</span>
+          <span class="audit-text">Quality rule proposed for <strong>revenue_daily</strong></span>
+          <span class="audit-time">1:04s</span>
+        </div>
+        <div class="audit-row">
+          <span class="badge a">Anomaly</span>
+          <span class="audit-text">Null spike detected in <strong>users.signup_date</strong></span>
+          <span class="audit-time">2:33s</span>
+        </div>
+        <div class="audit-row">
+          <span class="badge b">Classify</span>
+          <span class="audit-text"><strong>payments.card_last4</strong> tagged PCI · confidence 96%</span>
+          <span class="audit-time">3:15s</span>
+        </div>
+        <div class="audit-row">
+          <span class="badge g">Lineage</span>
+          <span class="audit-text">New path: <strong>raw_events &#8594; ml_features</strong></span>
+          <span class="audit-time">4:50s</span>
+        </div>
+        <div class="audit-row">
+          <span class="badge b">Glossary</span>
+          <span class="audit-text">Term <strong>"Monthly Active User"</strong> linked to 4 assets</span>
+          <span class="audit-time">6:02s</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI-ASSISTED BUSINESS GLOSSARY -->
+  <section id="glossary">
+    <div class="eyebrow">AI-Assisted Business Glossary</div>
+    <h2 class="section-heading">Terms suggested,<br><em>linked automatically.</em></h2>
+    <p class="section-sub">Business terms are surfaced and connected to your data assets automatically. The built-in AI use case registry ties governance directly to your ML initiatives.</p>
+    <div class="gloss-grid">
+      <div class="gloss-card">
+        <div class="gloss-top">
+          <span class="gloss-term">Monthly Active User</span>
+          <span class="ai-pill"><i class="ti ti-sparkles" style="font-size:10px;"></i> AI suggested</span>
+        </div>
+        <div class="gloss-def">A user who has performed at least one qualifying event within a rolling 30-day window, as defined by the product analytics team.</div>
+        <div class="gloss-tags">
+          <span class="gloss-tag">analytics.events</span>
+          <span class="gloss-tag">users.profiles</span>
+          <span class="gloss-tag">ml_features.engagement</span>
+        </div>
+      </div>
+      <div class="gloss-card">
+        <div class="gloss-top">
+          <span class="gloss-term">Customer Lifetime Value</span>
+          <span class="ai-pill"><i class="ti ti-sparkles" style="font-size:10px;"></i> AI suggested</span>
+        </div>
+        <div class="gloss-def">Predicted total net revenue attributable to a customer over their entire relationship with the business, used in churn and acquisition models.</div>
+        <div class="gloss-tags">
+          <span class="gloss-tag">orders.revenue</span>
+          <span class="gloss-tag">ml_features.ltv</span>
+        </div>
+      </div>
+      <div class="gloss-card">
+        <div class="gloss-top">
+          <span class="gloss-term">Data Steward</span>
+          <span class="ai-pill"><i class="ti ti-sparkles" style="font-size:10px;"></i> AI suggested</span>
+        </div>
+        <div class="gloss-def">The designated business owner responsible for data quality, access decisions, and policy compliance for a given domain or dataset.</div>
+        <div class="gloss-tags">
+          <span class="gloss-tag">governance.roles</span>
+          <span class="gloss-tag">policy.ownership</span>
+        </div>
+      </div>
+      <div class="gloss-card">
+        <div class="gloss-top">
+          <span class="gloss-term">Training Dataset</span>
+          <span class="ai-pill"><i class="ti ti-sparkles" style="font-size:10px;"></i> AI suggested</span>
+        </div>
+        <div class="gloss-def">A curated, versioned snapshot of data used to train a machine learning model, with documented quality dimensions and lineage to source systems.</div>
+        <div class="gloss-tags">
+          <span class="gloss-tag">ml_features.*</span>
+          <span class="gloss-tag">ai_use_case_registry</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="cta-wrap" id="cta">
+    <h2 class="cta-heading">Ready to govern<br><em>at AI speed?</em></h2>
+    <p class="cta-sub">Join forward-thinking data teams who trust CelesteIQ to keep their AI pipelines clean, compliant, and truly ready.</p>
+    <div class="cta-btns">
+      <a href="#" class="btn-p">Request a Demo &#8594;</a>
+      <a href="#" class="btn-s">Talk to Sales</a>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="foot-brand">Celeste<span>IQ</span></div>
+  <div class="foot-links">
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="#">Security</a>
+    <a href="#">Docs</a>
+  </div>
+  <span class="foot-copy">&#169; 2026 CelesteIQ. All rights reserved.</span>
+</footer>
+
+</body>
+</html>
