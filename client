@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Celeste IQ — Client Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;600;700;900&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy-deep: #020917;
+      --navy-mid: #071530;
+      --navy-light: #0d2146;
+      --blue-glow: #2a6fd4;
+      --blue-accent: #4a9eff;
+      --blue-bright: #6db8ff;
+      --text-white: #ffffff;
+      --text-muted: #8aafd4;
+      --text-dim: #3d6080;
+      --error: #ff5a6e;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--navy-deep);
+      color: var(--text-white);
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.25rem 4rem;
+      background: linear-gradient(to bottom, rgba(2,9,23,0.95) 0%, transparent 100%);
+      backdrop-filter: blur(4px);
+    }
+    .nav-logo {
+      font-family: 'Arial Black', Arial, sans-serif;
+      font-size: 1.5rem; font-weight: 900; letter-spacing: 0.04em;
+      text-decoration: none; color: var(--text-white);
+    }
+    .nav-logo span { color: var(--blue-accent); }
+    .nav-back {
+      color: var(--text-muted); font-size: 0.875rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none;
+      display: flex; align-items: center; gap: 0.5rem;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--text-white); }
+    .nav-back svg { width: 16px; height: 16px; }
+
+    /* ─── MAIN ─── */
+    .login-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 6rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #wave-canvas {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      opacity: 0.35;
+    }
+
+    /* ─── CARD ─── */
+    .login-card {
+      position: relative; z-index: 2;
+      width: 100%; max-width: 440px;
+      background: var(--navy-mid);
+      border: 1px solid rgba(42,111,212,0.2);
+      padding: 3rem;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    /* subtle inner glow on card */
+    .login-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(74,158,255,0.5), transparent);
+    }
+
+    .card-eyebrow {
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--blue-accent);
+      margin-bottom: 0.75rem;
+    }
+
+    .card-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2.2rem; font-weight: 900; line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-subtitle {
+      font-size: 0.9rem; color: var(--text-muted); font-weight: 300;
+      margin-bottom: 2.25rem;
+      line-height: 1.5;
+    }
+
+    /* ─── FORM ─── */
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      background: var(--navy-deep);
+      border: 1px solid rgba(42,111,212,0.2);
+      color: var(--text-white);
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 400;
+      padding: 0.8rem 1rem;
+      border-radius: 2px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+      border-color: var(--blue-glow);
+      box-shadow: 0 0 0 3px rgba(42,111,212,0.15);
+    }
+
+    input::placeholder { color: var(--text-dim); }
+
+    /* password row */
+    .password-row {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    .password-row label { margin-bottom: 0; }
+    .forgot-link {
+      font-size: 0.75rem; color: var(--text-dim); text-decoration: none;
+      font-weight: 600; letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+    .forgot-link:hover { color: var(--blue-accent); }
+
+    /* ─── ERROR MSG ─── */
+    .error-msg {
+      display: none;
+      font-size: 0.8rem; color: var(--error);
+      margin-top: 0.4rem;
+      letter-spacing: 0.02em;
+    }
+    .error-msg.visible { display: block; }
+    input.error { border-color: var(--error) !important; }
+
+    /* ─── SUBMIT ─── */
+    .btn-submit {
+      width: 100%;
+      background: var(--blue-glow);
+      color: #fff;
+      border: none; cursor: pointer;
+      padding: 0.9rem 2rem;
+      border-radius: 2px;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 700; font-size: 0.9rem; letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-top: 1.75rem;
+      transition: background 0.2s, transform 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-submit:hover { background: var(--blue-accent); transform: translateY(-1px); }
+    .btn-submit:active { transform: translateY(0); }
+
+    /* loading shimmer on btn */
+    .btn-submit.loading {
+      pointer-events: none;
+      color: transparent;
+    }
+    .btn-submit.loading::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 18px; height: 18px;
+      margin: -9px 0 0 -9px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    /* ─── DIVIDER ─── */
+    .divider {
+      display: flex; align-items: center; gap: 1rem;
+      margin: 1.75rem 0;
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1;
+      height: 1px; background: rgba(42,111,212,0.15);
+    }
+    .divider span {
+      font-size: 0.7rem; color: var(--text-dim);
+      letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600;
+    }
+
+    /* ─── SSO BUTTON ─── */
+    .btn-sso {
+      width: 100%;
+      background: transparent;
+      border: 1px solid rgba(42,111,212,0.25);
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 0.8rem 2rem;
+      border-radius: 2px;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600; font-size: 0.85rem; letter-spacing: 0.06em;
+      text-transform: uppercase;
+      display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-sso:hover { border-color: var(--blue-accent); color: var(--text-white); }
+    .btn-sso svg { width: 16px; height: 16px; }
+
+    /* ─── FOOTER NOTE ─── */
+    .card-footer-note {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(42,111,212,0.1);
+      font-size: 0.8rem; color: var(--text-dim);
+      text-align: center; line-height: 1.5;
+    }
+    .card-footer-note a {
+      color: var(--blue-accent); text-decoration: none;
+      font-weight: 600;
+    }
+    .card-footer-note a:hover { text-decoration: underline; }
+
+    /* ─── PAGE FOOTER ─── */
+    footer {
+      position: relative; z-index: 2;
+      padding: 1.5rem 4rem;
+      border-top: 1px solid rgba(42,111,212,0.1);
+      display: flex; justify-content: space-between; align-items: center;
+      color: var(--text-dim); font-size: 0.78rem;
+    }
+    .footer-logo {
+      font-family: 'Arial Black', Arial, sans-serif;
+      font-size: 1rem; font-weight: 900; letter-spacing: 0.04em;
+    }
+    .footer-logo span { color: var(--blue-accent); }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 600px) {
+      nav { padding: 1rem 1.5rem; }
+      .login-card { padding: 2rem 1.5rem; }
+      footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo">Celeste <span>IQ</span></a>
+    <a href="index.html" class="nav-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 12H5M12 5l-7 7 7 7"/>
+      </svg>
+      Back to site
+    </a>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="login-wrapper">
+    <canvas id="wave-canvas"></canvas>
+
+    <div class="login-card">
+      <p class="card-eyebrow">Client Portal</p>
+      <h1 class="card-title">Welcome back.</h1>
+      <p class="card-subtitle">Sign in to your Celeste IQ workspace.</p>
+
+      <div class="form-group">
+        <label for="email">Work Email</label>
+        <input type="email" id="email" placeholder="you@company.com" autocomplete="email" />
+        <span class="error-msg" id="email-error">Please enter a valid email address.</span>
+      </div>
+
+      <div class="form-group">
+        <div class="password-row">
+          <label for="password">Password</label>
+          <a href="#" class="forgot-link">Forgot password?</a>
+        </div>
+        <input type="password" id="password" placeholder="••••••••••••" autocomplete="current-password" />
+        <span class="error-msg" id="password-error">Password must be at least 8 characters.</span>
+      </div>
+
+      <button class="btn-submit" id="login-btn" onclick="handleLogin()">
+        Sign In
+      </button>
+
+      <div class="divider"><span>or</span></div>
+
+      <button class="btn-sso" onclick="handleSSO()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0110 0v4"/>
+        </svg>
+        Continue with SSO
+      </button>
+
+      <div class="card-footer-note">
+        Don't have an account? <a href="#">Request access</a> or <a href="#">contact your admin</a>.
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Celeste <span>IQ</span></div>
+    <div>© 2026 Celeste IQ. All rights reserved.</div>
+    <div>Privacy · Terms · Security</div>
+  </footer>
+
+  <script>
+    // ─── Wave canvas (same as index) ───
+    const canvas = document.getElementById('wave-canvas');
+    const ctx = canvas.getContext('2d');
+    let t = 0;
+
+    function resize() {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const w = canvas.width, h = canvas.height;
+
+      for (let layer = 0; layer < 4; layer++) {
+        ctx.beginPath();
+        const amp = 60 + layer * 25;
+        const freq = 0.004 - layer * 0.0005;
+        const speed = 0.008 + layer * 0.003;
+        const yBase = h * (0.4 + layer * 0.12);
+        const alpha = 0.12 - layer * 0.02;
+
+        ctx.moveTo(0, h);
+        for (let x = 0; x <= w; x += 4) {
+          const y = yBase + Math.sin(x * freq + t * speed + layer) * amp
+                          + Math.sin(x * freq * 1.7 + t * speed * 0.6) * (amp * 0.4);
+          ctx.lineTo(x, y);
+        }
+        ctx.lineTo(w, h);
+        ctx.closePath();
+
+        const grad = ctx.createLinearGradient(0, yBase - amp, 0, h);
+        grad.addColorStop(0, `rgba(42, 111, 212, ${alpha})`);
+        grad.addColorStop(1, `rgba(2, 9, 23, 0)`);
+        ctx.fillStyle = grad;
+        ctx.fill();
+      }
+
+      t += 1;
+      requestAnimationFrame(draw);
+    }
+
+    resize();
+    window.addEventListener('resize', resize);
+    draw();
+
+    // ─── Form validation ───
+    function handleLogin() {
+      const emailEl = document.getElementById('email');
+      const passwordEl = document.getElementById('password');
+      const emailErr = document.getElementById('email-error');
+      const passwordErr = document.getElementById('password-error');
+      let valid = true;
+
+      // Reset
+      emailEl.classList.remove('error');
+      passwordEl.classList.remove('error');
+      emailErr.classList.remove('visible');
+      passwordErr.classList.remove('visible');
+
+      const emailVal = emailEl.value.trim();
+      const passVal = passwordEl.value;
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(emailVal)) {
+        emailEl.classList.add('error');
+        emailErr.classList.add('visible');
+        valid = false;
+      }
+
+      if (passVal.length < 8) {
+        passwordEl.classList.add('error');
+        passwordErr.classList.add('visible');
+        valid = false;
+      }
+
+      if (!valid) return;
+
+      // Simulate loading
+      const btn = document.getElementById('login-btn');
+      btn.classList.add('loading');
+      setTimeout(() => {
+        btn.classList.remove('loading');
+        // Replace with real auth redirect
+        alert('Auth integration point — redirect to dashboard here.');
+      }, 1800);
+    }
+
+    function handleSSO() {
+      // Replace with real SSO redirect
+      alert('SSO integration point.');
+    }
+
+    // Allow Enter key to submit
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') handleLogin();
+    });
+  </script>
+</body>
+</html>
