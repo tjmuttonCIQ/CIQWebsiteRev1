@@ -6,7 +6,7 @@
 <title>CelesteIQ — Platform</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;600;700;900&family=Barlow+Condensed:wght@700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -14,41 +14,56 @@ html{scroll-behavior:smooth}
 body{
   background:#060c16;
   color:#e2eaf4;
-  font-family:'Inter',sans-serif;
+  font-family:'Barlow',sans-serif;
   font-size:16px;
   line-height:1.65;
   overflow-x:hidden;
 }
 
-/* ── NAV ── */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 6%;
-  height:64px;
-  background:rgba(6,12,22,0.88);
-  backdrop-filter:blur(14px);
-  border-bottom:1px solid rgba(255,255,255,0.06);
+/* ── NAV (matches index.html) ── */
+:root {
+  --navy-deep: #020917;
+  --navy-mid: #071530;
+  --navy-light: #0d2146;
+  --blue-glow: #2a6fd4;
+  --blue-accent: #4a9eff;
+  --blue-bright: #6db8ff;
+  --text-white: #ffffff;
+  --text-muted: #8aafd4;
+  --text-dim: #3d6080;
 }
-.nav-logo{
-  font-family:'Plus Jakarta Sans',sans-serif;
-  font-size:19px;font-weight:700;color:#fff;letter-spacing:-0.3px;
+
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.25rem 4rem;
+  background: linear-gradient(to bottom, rgba(2,9,23,0.95) 0%, transparent 100%);
+  backdrop-filter: blur(4px);
 }
-.nav-logo span{color:#38bdf8;}
-.nav-links { display: flex; gap: 2.5rem; align-items: center; }
-    .nav-links a {
-      color: var(--text-muted); font-size: 0.875rem; font-weight: 600;
-      letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--text-white); }
-.nav-cta{
-  background:#38bdf8;color:#060c16;
-  padding:8px 18px;border-radius:6px;
-  font-size:14px;font-weight:600;text-decoration:none;
-  transition:background .2s;
+.nav-logo {
+  font-family: 'Arial Black', Arial, sans-serif;
+  font-size: 1.5rem; font-weight: 900; letter-spacing: 0.04em;
+  color: #fff; text-decoration: none;
 }
-.nav-cta:hover{background:#7dd3fc;}
+.nav-logo span { color: var(--blue-accent); }
+.nav-links { display: flex; gap: 2.5rem; align-items: center; list-style: none; }
+.nav-links a {
+  color: var(--text-muted); font-size: 0.875rem; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--text-white); }
+.nav-cta {
+  border: 1px solid var(--blue-glow) !important;
+  color: var(--blue-bright) !important;
+  padding: 0.45rem 1.1rem;
+  border-radius: 3px;
+  transition: background 0.2s, color 0.2s !important;
+}
+.nav-cta:hover {
+  background: var(--blue-glow) !important;
+  color: #fff !important;
+}
 
 /* ── WRAPPER ── */
 .wrap{max-width:1100px;margin:0 auto;padding:0 6%;}
@@ -259,8 +274,8 @@ footer{
   display:flex;align-items:center;justify-content:space-between;
   max-width:100%;
 }
-.foot-brand{font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:700;color:#fff;}
-.foot-brand span{color:#38bdf8;}
+.foot-brand{font-family:'Arial Black',Arial,sans-serif;font-size:16px;font-weight:900;color:#fff;letter-spacing:0.04em;}
+.foot-brand span{color:var(--blue-accent);}
 .foot-links{display:flex;gap:22px;}
 .foot-links a{font-size:13px;color:rgba(226,234,244,0.3);text-decoration:none;transition:color .2s;}
 .foot-links a:hover{color:rgba(226,234,244,0.6);}
@@ -273,6 +288,7 @@ footer{
   .air-grid,.trans-grid{grid-template-columns:1fr;}
   .gloss-grid{grid-template-columns:1fr;}
   .cta-wrap{padding:48px 28px;}
+  nav { padding: 1rem 1.5rem; }
   nav .nav-links{display:none;}
   footer{flex-direction:column;gap:16px;text-align:center;}
 }
@@ -285,16 +301,14 @@ footer{
 <body>
 
 <nav>
-  <div class="nav-logo">>
-  <!--<div class="nav-logo">Celeste<span>IQ</span></div>-->
+  <div class="nav-logo">Celeste<span>IQ</span></div>
   <ul class="nav-links">
-    <li><a href="platform.html">Platform</a></li> 
+    <li><a href="platform.html">Platform</a></li>
     <li><a href="#">Solutions</a></li>
     <li><a href="about.html">Company</a></li>
     <li><a href="client.html">Client Portal</a></li>
-    <li><a href="index.html">Home</a></li>
-  <!--</ul>-->
-  <!--<a href="#cta" class="nav-cta">Get Started</a>-->
+    <li><a href="index.html" class="nav-cta">Get Started</a></li>
+  </ul>
 </nav>
 
 <div class="wrap">
